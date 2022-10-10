@@ -8,6 +8,7 @@ import 'package:mobile_technology/data/repository/database_impl.dart';
 import 'package:mobile_technology/data/utils/permission_handler.dart';
 import 'package:mobile_technology/domain/freezed/data_req.dart';
 import 'package:device_information/device_information.dart';
+import 'package:mobile_technology/presentation/screens/success_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../data/utils/exports.dart';
 
@@ -68,7 +69,7 @@ class CreateCustomerNotifier extends StateNotifier<DataReqState> {
   }
 
   ///Create Customer
-  Future<void> createCustomer() async {
+  Future<void> createCustomer({required BuildContext context}) async {
     state = const DataReqState.loading();
     final PermissionStatus permissionStatus = await getPhonePermission();
     debugPrint(permissionStatus.name);
@@ -118,6 +119,8 @@ class CreateCustomerNotifier extends StateNotifier<DataReqState> {
           imei.clear();
           picture.clear();
           email.clear();
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const SuccessScreen()));
           Fluttertoast.showToast(
               msg: "Successfully registered",
               toastLength: Toast.LENGTH_SHORT,
@@ -133,7 +136,7 @@ class CreateCustomerNotifier extends StateNotifier<DataReqState> {
 }
 
 final customerRegProvider =
-    StateNotifierProvider<CreateCustomerNotifier, DataReqState>((ref) {
+    StateNotifierProvider.autoDispose<CreateCustomerNotifier, DataReqState>((ref) {
   return CreateCustomerNotifier(
       ref: ref,
       baseCustomerRegDatabaseRepository:

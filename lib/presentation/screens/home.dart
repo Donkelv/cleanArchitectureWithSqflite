@@ -1,3 +1,4 @@
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_technology/data/utils/exports.dart';
 import 'package:mobile_technology/domain/notifier/create_customer_notifier.dart';
@@ -39,8 +40,15 @@ class _HomeState extends ConsumerState<Home> {
   }
 
   @override
+  void dispose() {
+    ref.watch(customerRegProvider.notifier).dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    
     return AnnotatedRegion(
       value: const SystemUiOverlayStyle(
         // For Android.
@@ -69,8 +77,8 @@ class _HomeState extends ConsumerState<Home> {
                   ),
                   Text(
                     "Create an Account",
-                    style: largeTextInter()
-                        .copyWith(color: ColorConst().grayColor700, fontSize: 28.0.sp),
+                    style: largeTextInter().copyWith(
+                        color: ColorConst().grayColor700, fontSize: 28.0.sp),
                   ),
                   SizedBox(
                     height: 30.0.h,
@@ -167,7 +175,7 @@ class _HomeState extends ConsumerState<Home> {
                       onTap: () {
                         ref
                             .watch(customerRegProvider.notifier)
-                            .createCustomer();
+                            .createCustomer(context: context);
                       },
                       text: "Submit",
                     );
@@ -182,7 +190,7 @@ class _HomeState extends ConsumerState<Home> {
                       onTap: () {
                         ref
                             .watch(customerRegProvider.notifier)
-                            .createCustomer();
+                            .createCustomer(context: context);
                       },
                       text: "Submit",
                     );
@@ -192,7 +200,7 @@ class _HomeState extends ConsumerState<Home> {
                       onTap: () {
                         ref
                             .watch(customerRegProvider.notifier)
-                            .createCustomer();
+                            .createCustomer(context: context);
                       },
                       text: "Submit",
                     );

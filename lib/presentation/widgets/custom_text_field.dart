@@ -1,5 +1,5 @@
 
-import 'package:mobile_technology/data/utils/text_style.dart';
+
 
 import '../../data/utils/exports.dart';
 
@@ -13,7 +13,7 @@ class CustomTextField extends StatelessWidget {
     this.onEditingComplete,
     this.onFocusChange,
     this.onChanged,
-    this.maxLines,
+    this.maxLines, this.onTap, this.enabled,
 
   }) : super(key: key);
   final String? hintText;
@@ -23,6 +23,8 @@ class CustomTextField extends StatelessWidget {
   final void Function()? onEditingComplete;
   final void Function(bool)? onFocusChange;
   final void Function(String)? onChanged;
+  final void Function()? onTap;
+  final bool? enabled;
   final int? maxLines;
  
 
@@ -31,6 +33,8 @@ class CustomTextField extends StatelessWidget {
     return Focus(
       onFocusChange: onFocusChange,
       child: TextFormField(
+        enabled: enabled ?? true,
+        onTap: onTap,
         maxLines: maxLines ?? 1,
         keyboardType: textInputType ?? TextInputType.name,
         obscureText: obscureText ?? false,

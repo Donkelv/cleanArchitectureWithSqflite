@@ -8,4 +8,6 @@ class ColorConst {
   Color blackColor = const Color(0xFF000000);
 
   Color grayColor300 = const Color(0xFFD0D5DD);
+
+  Color grayColor700 = const Color(0xFF344054);
 }

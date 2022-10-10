@@ -8,3 +8,6 @@ export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:mobile_technology/data/utils/color_const.dart';
 export 'package:google_fonts/google_fonts.dart';
 export 'package:mobile_technology/data/utils/color_const.dart';
+export 'package:mobile_technology/data/utils/text_style.dart';
+export 'package:mobile_technology/presentation/widgets/custom_text_field.dart';
+export 'package:mobile_technology/presentation/widgets/custom_btn.dart';

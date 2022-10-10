@@ -1,3 +1,4 @@
+
 import 'package:mobile_technology/data/utils/exports.dart';
 
 
@@ -19,13 +20,18 @@ class Home extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Container(
-          width: size.width,
-          height: size.height,
-          color: Colors.white,
+        body: SafeArea(
+          top: true,
+          bottom: false,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 15.0.h,
+              ),
+              Text("data")
+            ],
           ),
         )
       ),

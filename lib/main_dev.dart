@@ -2,6 +2,7 @@ import 'package:mobile_technology/data/utils/exports.dart';
 import 'package:mobile_technology/route.dart';
 
 void main() async {
+  await ScreenUtil.ensureScreenSize();
   var databasesPath = await getDatabasesPath();
   String joinPath = [databasesPath, 'dev.db'].join();
   String path = joinPath;

@@ -6,13 +6,20 @@ class RoutePath extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Mobile Technologies',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const Home(),
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Mobile Technologies',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: const Home(),
+        );
+      }
     );
   }
 }

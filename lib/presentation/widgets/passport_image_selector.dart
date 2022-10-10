@@ -8,11 +8,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_technology/data/utils/exports.dart';
 import 'package:mobile_technology/domain/notifier/create_customer_notifier.dart';
 
-class PassportImageSelector extends ConsumerWidget {
+class PassportImageSelector extends ConsumerStatefulWidget {
   const PassportImageSelector({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PassportImageSelector> createState() => _PassportImageSelectorState();
+}
+
+class _PassportImageSelectorState extends ConsumerState<PassportImageSelector> {
+  @override
+  Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
       height: 150.0.h,
@@ -27,7 +32,8 @@ class PassportImageSelector extends ConsumerWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(20.0),
           onTap: () {
-            ref.watch(customerRegProvider.notifier).pickPassport();
+            ref.watch(customerRegProvider.notifier).pickPassport().then((value) => setState(() {
+              }),);
           },
           child: Center(
             child: Padding(

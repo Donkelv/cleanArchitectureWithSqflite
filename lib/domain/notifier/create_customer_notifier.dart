@@ -22,7 +22,7 @@ class CreateCustomerNotifier extends StateNotifier<DataReqState> {
   final Ref ref;
   final BaseCustomerRegDatabaseRepository _baseCustomerRegDatabaseRepository;
 
-  //Text Editing controllers
+  //TextEditing controllers
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController dob = TextEditingController();
@@ -32,8 +32,7 @@ class CreateCustomerNotifier extends StateNotifier<DataReqState> {
   TextEditingController imei = TextEditingController();
 
   ///Image Picker
-
-  void pickPassport() async {
+  Future<void> pickPassport() async {
     final ImagePicker imagePicker = ImagePicker();
     XFile? imageFile;
     File? file;
@@ -51,7 +50,7 @@ class CreateCustomerNotifier extends StateNotifier<DataReqState> {
     }
   }
 
-  void takePicture() async {
+  Future<void> takePicture() async {
     final ImagePicker imagePicker = ImagePicker();
     XFile? imageFile;
     File? file;
@@ -60,7 +59,6 @@ class CreateCustomerNotifier extends StateNotifier<DataReqState> {
       imageFile = await imagePicker.pickImage(source: ImageSource.camera);
       file = File(imageFile!.path);
       filePath = file.path;
-
       picture.text = filePath;
     } catch (e) {
       if (kDebugMode) {
@@ -113,6 +111,13 @@ class CreateCustomerNotifier extends StateNotifier<DataReqState> {
         },
         (r) {
           state = DataReqState.data(data: r);
+          firstName.clear();
+          dob.clear();
+          lastName.clear();
+          passport.clear();
+          imei.clear();
+          picture.clear();
+          email.clear();
           Fluttertoast.showToast(
               msg: "Successfully registered",
               toastLength: Toast.LENGTH_SHORT,

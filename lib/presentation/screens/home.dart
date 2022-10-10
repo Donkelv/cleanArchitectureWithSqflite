@@ -1,8 +1,8 @@
-
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_technology/data/utils/exports.dart';
 import 'package:mobile_technology/domain/notifier/create_customer_notifier.dart';
+import 'package:mobile_technology/presentation/widgets/custom_date_selector.dart';
+import 'package:mobile_technology/presentation/widgets/custom_loading_btn.dart';
 import 'package:mobile_technology/presentation/widgets/passport_image_selector.dart';
 import 'package:mobile_technology/presentation/widgets/picture_image_selector.dart';
 
@@ -117,10 +117,7 @@ class _HomeState extends ConsumerState<Home> {
                   SizedBox(
                     height: 6.0.h,
                   ),
-                  CustomTextField(
-                    controller: ref.read(customerRegProvider.notifier).dob,
-                    //enabled: false,
-                    hintText: "00/00/0000",
+                  CustomDateSelector(
                     onTap: () {
                       _selectDate(context);
                     },
@@ -164,13 +161,42 @@ class _HomeState extends ConsumerState<Home> {
                   SizedBox(
                     height: 30.0.h,
                   ),
-                  CustomButton(
-                    size: size,
-                    onTap: () {
-                      ref.watch(customerRegProvider.notifier).createCustomer();
-                    },
-                    text: "Submit",
-                  ),
+                  ref.watch(customerRegProvider).when(initial: () {
+                    return CustomButton(
+                      size: size,
+                      onTap: () {
+                        ref
+                            .watch(customerRegProvider.notifier)
+                            .createCustomer();
+                      },
+                      text: "Submit",
+                    );
+                  }, loading: () {
+                    return CustomLoadingButton(
+                      size: size,
+                      text: "Submit",
+                    );
+                  }, data: (data) {
+                    return CustomButton(
+                      size: size,
+                      onTap: () {
+                        ref
+                            .watch(customerRegProvider.notifier)
+                            .createCustomer();
+                      },
+                      text: "Submit",
+                    );
+                  }, error: (error) {
+                    return CustomButton(
+                      size: size,
+                      onTap: () {
+                        ref
+                            .watch(customerRegProvider.notifier)
+                            .createCustomer();
+                      },
+                      text: "Submit",
+                    );
+                  }),
                   SizedBox(
                     height: 50.0.h,
                   ),
@@ -184,15 +210,11 @@ class _HomeState extends ConsumerState<Home> {
   }
 }
 
-
-
-
 class PassportSelector extends ConsumerWidget {
   const PassportSelector({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,8 +235,3 @@ class PassportSelector extends ConsumerWidget {
     );
   }
 }
-
-
-
-
-

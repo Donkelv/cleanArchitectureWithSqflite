@@ -5,11 +5,16 @@ import 'package:mobile_technology/data/utils/exports.dart';
 import 'package:mobile_technology/domain/notifier/create_customer_notifier.dart';
 
 
-class PictureImageSelector extends ConsumerWidget {
+class PictureImageSelector extends ConsumerStatefulWidget {
   const PictureImageSelector({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PictureImageSelector> createState() => _PictureImageSelectorState();
+}
+
+class _PictureImageSelectorState extends ConsumerState<PictureImageSelector> {
+  @override
+  Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
       height: 150.0.h,
@@ -24,7 +29,10 @@ class PictureImageSelector extends ConsumerWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(20.0),
           onTap: () {
-            ref.watch(customerRegProvider.notifier).takePicture();
+            ref.watch(customerRegProvider.notifier).takePicture().then((value) {
+              setState(() {
+              });
+            });
           },
           child: Center(
             child: Padding(

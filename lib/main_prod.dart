@@ -4,7 +4,7 @@ import 'package:mobile_technology/route.dart';
 void main() async {
   await ScreenUtil.ensureScreenSize();
   var databasesPath = await getDatabasesPath();
-  String joinPath = [databasesPath, 'prod.db'].join();
+  String joinPath = join(databasesPath, 'prod.db');
   String path = joinPath;
   FlavorConfig(flavor: Flavor.dev, values: FlavorValues(path: path));
   WidgetsFlutterBinding.ensureInitialized();

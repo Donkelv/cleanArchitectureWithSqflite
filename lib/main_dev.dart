@@ -1,4 +1,5 @@
 import 'package:mobile_technology/data/utils/exports.dart';
+import 'package:mobile_technology/route.dart';
 
 void main() async {
   var databasesPath = await getDatabasesPath();
@@ -6,5 +7,5 @@ void main() async {
   String path = joinPath;
   FlavorConfig(flavor: Flavor.dev, values: FlavorValues(path: path));
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const Home());
+  runApp( const RoutePath());
 }

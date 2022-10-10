@@ -43,6 +43,9 @@ dependencies:
   fluttertoast: ^8.0.9
   image_picker: ^0.8.5+3
   dartz: ^0.10.1
+  device_information: ^0.0.4
+  permission_handler: ^10.1.0
+  
 
 dev_dependencies:
   flutter_test:

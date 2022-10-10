@@ -7,8 +7,8 @@ import 'package:dartz/dartz.dart';
 
 class CustomerRegDatabaseRepository
     implements BaseCustomerRegDatabaseRepository {
-  static const _databaseName = 'customer_reg_database';
-  static const _tableName = 'customer_reg_table';
+  static const _databaseName = 'customerRegDatabase';
+  static const _tableName = 'customerRegTable';
   static const _databaseVersion = 1;
   static const _columnId = 'id';
   static const _columnImei = "imei";
@@ -27,7 +27,7 @@ class CustomerRegDatabaseRepository
 
   @override
   Future<Either<Failure, CustomerRegEntity>> createCustomer(
-      final String imei,
+      final String? imei,
       final String firstName,
       final String lastName,
       final String dob,
@@ -36,9 +36,17 @@ class CustomerRegDatabaseRepository
       final String picture) async {
     final db = await database;
     late final CustomerRegEntity customerRegEntity;
+    debugPrint(FlavorConfig.instance!.values.path);
+    debugPrint(imei);
+    debugPrint(firstName);
+    debugPrint(lastName);
+    debugPrint(dob);
+    debugPrint(passport);
+    debugPrint(email);
+    debugPrint(picture);
 
     CustomerRegEntity value = {
-      'imei': imei,
+      'imei': "imei",
       'firstname': firstName,
       'lastName': lastName,
       'dob': dob,
@@ -46,6 +54,7 @@ class CustomerRegDatabaseRepository
       'email': email,
       'picture': picture
     };
+    debugPrint(value.toString());
 
     try {
       await db.transaction((txn) async {
@@ -56,29 +65,33 @@ class CustomerRegDatabaseRepository
         );
         final results = await txn
             .query(_tableName, where: '$_columnId = ?', whereArgs: [id]);
-        customerRegEntity = results.first;
+            debugPrint("This are the results $results");
+        customerRegEntity = results.last;
       });
       return Right(customerRegEntity);
     } catch (e) {
+      debugPrint("Catched error os $e");
       return Left(Failure(message: e.toString()));
     }
   }
 
   Future<Database> _initDatabase() async {
-    return openDatabase(
-      join(await getDatabasesPath(), _databaseName),
-      onCreate: (db, _) {
-        db.execute('''
-          CREATE TABLE $_tableName(
-            $_columnId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-            $_columnImei TEXT NOT NULL,
-            $_columnFirstName TEXT NOT NULL,
-            $_columnLastName INTEGER NOT NULL,
-            $_columnDob TEXT NOT NULL
-            $_columnPassport TEXT
-            $_columnEmail TEXT
-            $_columnPicture TEXT NOT NULL
-          )
+    debugPrint(FlavorConfig.instance!.values.path);
+    return await openDatabase(
+      join(FlavorConfig.instance!.values.path, _databaseName),
+      onCreate: (db, _) async {
+        await db.execute('''
+CREATE TABLE IF NOT EXISTS $_tableName (
+        $_columnId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        $_columnImei TEXT,
+        $_columnFirstName TEXT,
+        $_columnLastName TEXT,
+        $_columnDob TEXT,
+        $_columnPassport TEXT,
+        $_columnEmail TEXT,
+        $_columnPicture TEXT
+        
+        )
         ''');
       },
       version: _databaseVersion,

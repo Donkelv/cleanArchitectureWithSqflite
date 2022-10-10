@@ -1,37 +1,56 @@
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_technology/data/utils/exports.dart';
+import 'package:mobile_technology/domain/notifier/create_customer_notifier.dart';
 
-
-
-
-class Home extends StatefulWidget {
+class Home extends ConsumerStatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  ConsumerState<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends ConsumerState<Home> {
+  DateTime todaysDate = DateTime.now();
+  DateTime selectedDate = DateTime.now();
+  bool adult = false;
 
-  TextEditingController firstName = TextEditingController();
-  TextEditingController lastName = TextEditingController();
-  TextEditingController dob = TextEditingController();
-  TextEditingController passport = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController picture = TextEditingController();
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: todaysDate,
+        firstDate: todaysDate,
+        lastDate: todaysDate);
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        ref.read(customerRegProvider.notifier).dob.text =
+            "${picked.day}/${picked.month}/${picked.year}";
+        selectedDate = picked;
+        if (selectedDate.year - todaysDate.year < 18) {
+          adult = false;
+        } else {
+          adult = true;
+        }
+      });
+    }
+  }
 
+  // TextEditingController firstName = TextEditingController();
+  // TextEditingController lastName = TextEditingController();
+  // TextEditingController dob = TextEditingController();
+  // TextEditingController passport = TextEditingController();
+  // TextEditingController email = TextEditingController();
+  // TextEditingController picture = TextEditingController();
 
   @override
   void dispose() {
-    firstName.clear();
-    lastName.clear();
-    dob.clear();
-    passport.clear();
-    email.clear();
-    picture.clear();
+    // firstName.clear();
+    // lastName.clear();
+    // dob.clear();
+    // passport.clear();
+    // email.clear();
+    // picture.clear();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -47,18 +66,18 @@ class _HomeState extends State<Home> {
         statusBarColor: Colors.transparent,
       ),
       child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          top: true,
-          bottom: false,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 15.0.h,
-              ),
-              Text(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            top: true,
+            bottom: false,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 15.0.h,
+                ),
+                Text(
                   "Create an account",
                   style: largeTextInter()
                       .copyWith(color: ColorConst().grayColor700),
@@ -72,8 +91,8 @@ class _HomeState extends State<Home> {
                       color: ColorConst().grayColor700,
                       fontWeight: FontWeight.w500),
                 ),
-                 CustomTextField(
-                  controller: firstName,
+                CustomTextField(
+                  controller: ref.read(customerRegProvider.notifier).firstName,
                   hintText: null,
                 ),
                 Text(
@@ -86,7 +105,7 @@ class _HomeState extends State<Home> {
                   height: 6.0.h,
                 ),
                 CustomTextField(
-                  controller: lastName,
+                  controller: ref.read(customerRegProvider.notifier).lastName,
                   hintText: null,
                 ),
                 SizedBox(
@@ -102,25 +121,17 @@ class _HomeState extends State<Home> {
                   height: 6.0.h,
                 ),
                 CustomTextField(
-                  controller: dob,
+                  controller: ref.read(customerRegProvider.notifier).dob,
                   hintText: "00/00/0000",
+                  onTap: () {
+                    _selectDate(context);
+                  },
                 ),
-                SizedBox(
-                  height: 30.0.h,
-                ),
-                Text(
-                  "Passort",
-                  style: normalText().copyWith(
-                      color: ColorConst().grayColor700,
-                      fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  height: 6.0.h,
-                ),
-                CustomTextField(
-                  controller: passport,
-                  hintText: null,
-                ),
+                AnimatedSize(
+                    duration: const Duration(milliseconds: 300),
+                    child: adult == true
+                        ? passortSelection()
+                        : const SizedBox.shrink(),),
                 SizedBox(
                   height: 30.0.h,
                 ),
@@ -134,7 +145,7 @@ class _HomeState extends State<Home> {
                   height: 6.0.h,
                 ),
                 CustomTextField(
-                  controller: email,
+                  controller: ref.read(customerRegProvider.notifier).email,
                   textInputType: TextInputType.emailAddress,
                   hintText: null,
                 ),
@@ -151,27 +162,44 @@ class _HomeState extends State<Home> {
                   height: 6.0.h,
                 ),
                 CustomTextField(
-                  controller: picture,
+                  controller: ref.read(customerRegProvider.notifier).picture,
                   hintText: null,
                 ),
                 SizedBox(
                   height: 30.0.h,
                 ),
-
                 CustomButton(
-                  size: size, 
-                  onTap: (){
-
-                }, 
-                text: "Submit",
+                  size: size,
+                  onTap: () {},
+                  text: "Submit",
                 ),
+              ],
+            ),
+          ),),
+    );
+  }
 
-
-
-            ],
-          ),
-        )
-      ),
+  Widget passortSelection() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 30.0.h,
+        ),
+        Text(
+          "Passort",
+          style: normalText().copyWith(
+              color: ColorConst().grayColor700, fontWeight: FontWeight.w500),
+        ),
+        SizedBox(
+          height: 6.0.h,
+        ),
+        CustomTextField(
+          controller: ref.read(customerRegProvider.notifier).passport,
+          hintText: null,
+        ),
+      ],
     );
   }
 }

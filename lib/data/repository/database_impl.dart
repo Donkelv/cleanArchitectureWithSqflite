@@ -64,8 +64,6 @@ class CustomerRegDatabaseRepository
     }
   }
 
-  
-
   Future<Database> _initDatabase() async {
     return openDatabase(
       join(await getDatabasesPath(), _databaseName),

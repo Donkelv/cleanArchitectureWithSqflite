@@ -1,6 +1,3 @@
-
-
-
 import '../../data/utils/exports.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -13,8 +10,9 @@ class CustomTextField extends StatelessWidget {
     this.onEditingComplete,
     this.onFocusChange,
     this.onChanged,
-    this.maxLines, this.onTap, this.enabled,
-
+    this.maxLines,
+    this.onTap,
+    this.enabled,
   }) : super(key: key);
   final String? hintText;
   final TextEditingController? controller;
@@ -26,7 +24,6 @@ class CustomTextField extends StatelessWidget {
   final void Function()? onTap;
   final bool? enabled;
   final int? maxLines;
- 
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +39,8 @@ class CustomTextField extends StatelessWidget {
         controller: controller,
         onEditingComplete: onEditingComplete,
         onChanged: onChanged,
-        style: TextStyle(color: ColorConst().blackColor), 
+        style: TextStyle(color: ColorConst().blackColor),
         decoration: InputDecoration(
-         
           contentPadding:
               EdgeInsets.symmetric(vertical: 10.0.h, horizontal: 14.0.w),
           hintText: hintText,

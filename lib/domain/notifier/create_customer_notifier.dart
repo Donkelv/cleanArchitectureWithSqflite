@@ -2,20 +2,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile_technology/data/repository/database.dart';
 import 'package:mobile_technology/data/repository/database_impl.dart';
-import 'package:mobile_technology/domain/freezed/database.dart';
+import 'package:mobile_technology/domain/freezed/data_req.dart';
 
 import '../../data/utils/exports.dart';
 
-class CreateCustomerNotifier extends StateNotifier<DatabaseState> {
+class CreateCustomerNotifier extends StateNotifier<DataReqState> {
   CreateCustomerNotifier({
     required this.ref,
     required BaseCustomerRegDatabaseRepository
         baseCustomerRegDatabaseRepository,
   })  : _baseCustomerRegDatabaseRepository = baseCustomerRegDatabaseRepository,
-        super(const DatabaseState.initial());
+        super(const DataReqState.initial());
 
   final Ref ref;
   final BaseCustomerRegDatabaseRepository _baseCustomerRegDatabaseRepository;
+
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+  TextEditingController dob = TextEditingController();
+  TextEditingController passport = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController picture = TextEditingController();
 
   Future<void> createCustomer(
       {required String imei,
@@ -25,12 +32,12 @@ class CreateCustomerNotifier extends StateNotifier<DatabaseState> {
       final String? passport,
       final String? email,
       required String picture}) async {
-    state = const DatabaseState.loading();
+    state = const DataReqState.loading();
     final response = await _baseCustomerRegDatabaseRepository.createCustomer(
         imei, firstName, lastName, dob, passport, email, picture);
     response.fold(
       (l) {
-        state = DatabaseState.error(error: l.message);
+        state = DataReqState.error(failure: l);
         Fluttertoast.showToast(
             msg: l.message,
             toastLength: Toast.LENGTH_SHORT,
@@ -41,7 +48,7 @@ class CreateCustomerNotifier extends StateNotifier<DatabaseState> {
             fontSize: 14.0.sp);
       },
       (r) {
-        state = DatabaseState.data(success: r);
+        state = DataReqState.data(data: r);
         Fluttertoast.showToast(
             msg: "Successfully registered",
             toastLength: Toast.LENGTH_SHORT,
@@ -55,15 +62,13 @@ class CreateCustomerNotifier extends StateNotifier<DatabaseState> {
   }
 }
 
-
-
 final customerRegProvider =
-    StateNotifierProvider<CreateCustomerNotifier, DatabaseState>((ref) {
+    StateNotifierProvider<CreateCustomerNotifier, DataReqState>((ref) {
   return CreateCustomerNotifier(
-      ref: ref, baseCustomerRegDatabaseRepository: ref.watch(customerRegDatabaseProvider));
+      ref: ref,
+      baseCustomerRegDatabaseRepository:
+          ref.watch(customerRegDatabaseProvider));
 });
 
-
-
-final customerRegDatabaseProvider =
-    Provider<BaseCustomerRegDatabaseRepository>((ref) => CustomerRegDatabaseRepository());
+final customerRegDatabaseProvider = Provider<BaseCustomerRegDatabaseRepository>(
+    (ref) => CustomerRegDatabaseRepository());

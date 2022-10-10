@@ -57,7 +57,7 @@ class CreateCustomerNotifier extends StateNotifier<DataReqState> {
     File? file;
     String? filePath;
     try {
-      imageFile = await imagePicker.pickImage(source: ImageSource.gallery);
+      imageFile = await imagePicker.pickImage(source: ImageSource.camera);
       file = File(imageFile!.path);
       filePath = file.path;
 
@@ -75,40 +75,55 @@ class CreateCustomerNotifier extends StateNotifier<DataReqState> {
     final PermissionStatus permissionStatus = await getPhonePermission();
     debugPrint(permissionStatus.name);
     imei.text = await DeviceInformation.deviceIMEINumber;
-    // = (await DeviceImei.getImei())!;
+
     debugPrint(imei.text);
-    final response = await _baseCustomerRegDatabaseRepository.createCustomer(
-        imei.text,
-        firstName.text,
-        lastName.text,
-        dob.text,
-        passport.text,
-        email.text,
-        picture.text);
-    response.fold(
-      (l) {
-        state = DataReqState.error(failure: l);
-        Fluttertoast.showToast(
-            msg: l.message,
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: ColorConst().blackColor,
-            textColor: ColorConst().whiteColor,
-            fontSize: 14.0.sp);
-      },
-      (r) {
-        state = DataReqState.data(data: r);
-        Fluttertoast.showToast(
-            msg: "Successfully registered",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: ColorConst().blackColor,
-            textColor: ColorConst().whiteColor,
-            fontSize: 14.0.sp);
-      },
-    );
+    if (firstName.text.isEmpty ||
+        lastName.text.isEmpty ||
+        dob.text.isEmpty ||
+        picture.text.isEmpty) {
+      Fluttertoast.showToast(
+          msg:
+              "Kindly fill in your first name, last name, dob and take a picture to continue",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: ColorConst().blackColor,
+          textColor: ColorConst().whiteColor,
+          fontSize: 14.0.sp);
+    } else {
+      final response = await _baseCustomerRegDatabaseRepository.createCustomer(
+          imei.text,
+          firstName.text,
+          lastName.text,
+          dob.text,
+          passport.text,
+          email.text,
+          picture.text);
+      response.fold(
+        (l) {
+          state = DataReqState.error(failure: l);
+          Fluttertoast.showToast(
+              msg: l.message,
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: ColorConst().blackColor,
+              textColor: ColorConst().whiteColor,
+              fontSize: 14.0.sp);
+        },
+        (r) {
+          state = DataReqState.data(data: r);
+          Fluttertoast.showToast(
+              msg: "Successfully registered",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: ColorConst().blackColor,
+              textColor: ColorConst().whiteColor,
+              fontSize: 14.0.sp);
+        },
+      );
+    }
   }
 }
 
@@ -122,20 +137,3 @@ final customerRegProvider =
 
 final customerRegDatabaseProvider = Provider<BaseCustomerRegDatabaseRepository>(
     (ref) => CustomerRegDatabaseRepository());
-
-
-
-
-final passportProvider = Provider<String>((ref) {
-  String value = "";
-  return value;
-});
-
-
-final picreProvider = Provider<String>((ref) {
-  String value = "";
-  return value;
-});
-
-
-

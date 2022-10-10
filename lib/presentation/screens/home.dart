@@ -1,8 +1,10 @@
-import 'dart:io';
+
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_technology/data/utils/exports.dart';
 import 'package:mobile_technology/domain/notifier/create_customer_notifier.dart';
+import 'package:mobile_technology/presentation/widgets/passport_image_selector.dart';
+import 'package:mobile_technology/presentation/widgets/picture_image_selector.dart';
 
 class Home extends ConsumerStatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -126,7 +128,7 @@ class _HomeState extends ConsumerState<Home> {
                   AnimatedSize(
                     duration: const Duration(milliseconds: 300),
                     child: adult == true
-                        ? passortSelection(size)
+                        ? const PassportSelector()
                         : const SizedBox.shrink(),
                   ),
                   SizedBox(
@@ -158,13 +160,7 @@ class _HomeState extends ConsumerState<Home> {
                   SizedBox(
                     height: 6.0.h,
                   ),
-                  ImageSelector(
-                    size: size,
-                    image: ref.watch(customerRegProvider.notifier).picture.text,
-                    onTap: () {
-                      ref.watch(customerRegProvider.notifier).takePicture();
-                    },
-                  ),
+                  const PictureImageSelector(),
                   SizedBox(
                     height: 30.0.h,
                   ),
@@ -186,8 +182,17 @@ class _HomeState extends ConsumerState<Home> {
       ),
     );
   }
+}
 
-  Widget passortSelection(Size size) {
+
+
+
+class PassportSelector extends ConsumerWidget {
+  const PassportSelector({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,62 +208,13 @@ class _HomeState extends ConsumerState<Home> {
         SizedBox(
           height: 6.0.h,
         ),
-        ImageSelector(
-          size: size,
-          image: ref.watch(customerRegProvider.notifier).passport.text,
-          onTap: () {
-            ref.watch(customerRegProvider.notifier).pickPassport();
-          },
-        )
+        const PassportImageSelector()
       ],
     );
   }
 }
 
-class ImageSelector extends StatelessWidget {
-  const ImageSelector({
-    Key? key,
-    required this.size,
-    required this.image,
-    this.onTap,
-  }) : super(key: key);
 
-  final Size size;
-  final void Function()? onTap;
-  final String image;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 150.0.h,
-      width: size.width,
-      decoration: BoxDecoration(
-        color: ColorConst().whiteColor,
-        borderRadius: BorderRadius.circular(20.0),
-        border: Border.all(color: ColorConst().grayColor300, width: 1.0),
-      ),
-      child: Material(
-        type: MaterialType.transparency,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20.0),
-          onTap: onTap,
-          child: Center(
-            child: Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 10.0.h),
-              child: image.isEmpty
-                  ? Text(
-                      "Kindly select an image to continue",
-                      textAlign: TextAlign.center,
-                      style: smallText().copyWith(
-                        color: ColorConst().grayColor700,
-                      ),
-                    )
-                  : Image.file(File(image)),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+
+

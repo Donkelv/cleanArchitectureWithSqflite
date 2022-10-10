@@ -1,11 +1,12 @@
 import 'package:mobile_technology/data/entity/customer_reg_entity.dart';
+import 'package:mobile_technology/data/entity/failure.dart';
 import 'package:mobile_technology/data/repository/database.dart';
 
 import '../utils/exports.dart';
+import 'package:dartz/dartz.dart';
 
-
-
-class CustomerRegDatabaseRepository implements BaseCustomerRegDatabaseRepository {
+class CustomerRegDatabaseRepository
+    implements BaseCustomerRegDatabaseRepository {
   static const _databaseName = 'customer_reg_database';
   static const _tableName = 'customer_reg_table';
   static const _databaseVersion = 1;
@@ -24,10 +25,8 @@ class CustomerRegDatabaseRepository implements BaseCustomerRegDatabaseRepository
     return _database!;
   }
 
-  
-
   @override
-  Future<CustomerRegEntity> createCustomer(
+  Future<Either<Failure, CustomerRegEntity>> createCustomer(
       final String imei,
       final String firstName,
       final String lastName,
@@ -48,20 +47,24 @@ class CustomerRegDatabaseRepository implements BaseCustomerRegDatabaseRepository
       'picture': picture
     };
 
-    await db.transaction((txn) async {
-      final id = await txn.insert(
-        _tableName,
-        value,
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      final results =
-          await txn.query(_tableName, where: '$_columnId = ?', whereArgs: [id]);
-      customerRegEntity = results.first;
-    });
-    return customerRegEntity;
+    try {
+      await db.transaction((txn) async {
+        final id = await txn.insert(
+          _tableName,
+          value,
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        final results = await txn
+            .query(_tableName, where: '$_columnId = ?', whereArgs: [id]);
+        customerRegEntity = results.first;
+      });
+      return Right(customerRegEntity);
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
   }
 
-
+  
 
   Future<Database> _initDatabase() async {
     return openDatabase(
@@ -83,5 +86,4 @@ class CustomerRegDatabaseRepository implements BaseCustomerRegDatabaseRepository
       version: _databaseVersion,
     );
   }
-  
 }

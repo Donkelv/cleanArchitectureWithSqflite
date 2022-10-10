@@ -24,13 +24,13 @@ class _PassportImageSelectorState extends ConsumerState<PassportImageSelector> {
       width: size.width,
       decoration: BoxDecoration(
         color: ColorConst().whiteColor,
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(15.0),
         border: Border.all(color: ColorConst().grayColor300, width: 1.0),
       ),
       child: Material(
         type: MaterialType.transparency,
         child: InkWell(
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(15.0),
           onTap: () {
             ref.watch(customerRegProvider.notifier).pickPassport().then((value) => setState(() {
               }),);

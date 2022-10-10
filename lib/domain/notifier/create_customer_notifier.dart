@@ -70,7 +70,7 @@ class CreateCustomerNotifier extends StateNotifier<DataReqState> {
 
   ///Create Customer
   Future<void> createCustomer({required BuildContext context}) async {
-    state = const DataReqState.loading();
+    
     final PermissionStatus permissionStatus = await getPhonePermission();
     debugPrint(permissionStatus.name);
     imei.text = await DeviceInformation.deviceIMEINumber;
@@ -90,6 +90,7 @@ class CreateCustomerNotifier extends StateNotifier<DataReqState> {
           textColor: ColorConst().whiteColor,
           fontSize: 14.0.sp);
     } else {
+      state = const DataReqState.loading();
       final response = await _baseCustomerRegDatabaseRepository.createCustomer(
           imei.text,
           firstName.text,

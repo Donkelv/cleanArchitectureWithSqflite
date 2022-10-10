@@ -21,13 +21,13 @@ class _PictureImageSelectorState extends ConsumerState<PictureImageSelector> {
       width: size.width,
       decoration: BoxDecoration(
         color: ColorConst().whiteColor,
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(15.0),
         border: Border.all(color: ColorConst().grayColor300, width: 1.0),
       ),
       child: Material(
         type: MaterialType.transparency,
         child: InkWell(
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(15.0),
           onTap: () {
             ref.watch(customerRegProvider.notifier).takePicture().then((value) {
               setState(() {
@@ -43,13 +43,11 @@ class _PictureImageSelectorState extends ConsumerState<PictureImageSelector> {
                       .picture
                       .text
                       .isEmpty
-                  ? Text(
-                      "Kindly select an image to continue",
-                      textAlign: TextAlign.center,
-                      style: smallText().copyWith(
-                        color: ColorConst().grayColor700,
-                      ),
-                    )
+
+                  ? 
+                  const Icon(Icons.add_a_photo_rounded)
+                  
+                 
                   : Image.file(File(
                       ref.watch(customerRegProvider.notifier).picture.text)),
             ),

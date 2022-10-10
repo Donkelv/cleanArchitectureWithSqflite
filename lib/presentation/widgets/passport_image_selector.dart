@@ -44,13 +44,9 @@ class _PassportImageSelectorState extends ConsumerState<PassportImageSelector> {
                       .passport
                       .text
                       .isEmpty
-                  ? Text(
-                      "Kindly select an image to continue",
-                      textAlign: TextAlign.center,
-                      style: smallText().copyWith(
-                        color: ColorConst().grayColor700,
-                      ),
-                    )
+                  ? 
+                  const Icon(Icons.add_photo_alternate_rounded)
+                 
                   : Image.file(File(
                       ref.watch(customerRegProvider.notifier).passport.text)),
             ),

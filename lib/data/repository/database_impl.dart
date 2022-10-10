@@ -46,7 +46,7 @@ class CustomerRegDatabaseRepository
     debugPrint(picture);
 
     CustomerRegEntity value = {
-      'imei': "imei",
+      'imei': imei,
       'firstname': firstName,
       'lastName': lastName,
       'dob': dob,

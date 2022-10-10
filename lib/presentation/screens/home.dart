@@ -68,9 +68,9 @@ class _HomeState extends ConsumerState<Home> {
                     height: 50.0.h,
                   ),
                   Text(
-                    "Create an account",
+                    "Create an Account",
                     style: largeTextInter()
-                        .copyWith(color: ColorConst().grayColor700),
+                        .copyWith(color: ColorConst().grayColor700, fontSize: 28.0.sp),
                   ),
                   SizedBox(
                     height: 30.0.h,

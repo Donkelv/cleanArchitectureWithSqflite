@@ -1,6 +1,6 @@
 import 'package:mobile_technology/data/utils/exports.dart';
 import 'package:mobile_technology/route.dart';
-import 'package:permission_handler/permission_handler.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
